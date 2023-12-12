@@ -1,16 +1,29 @@
 const express = require("express");
 const morgan = require("morgan");
-const cors = require("cors");
 const routes = require("./routes/routes.js");
-const app = express();
-const PORT = 3001;
+require("dotenv").config();
 
-app.use(morgan("dev"));
-app.use(cors());
-app.use(express.json());
-app.use(routes);
+class Application {
+  constructor() {
+    this.start();
+  }
+  configExpress() {
+    this.app = express();
+    this.app.use(morgan("dev"));
+    this.app.use(express.urlencoded({ extended: false }));
+    this.app.use(express.json());
+  }
+  setRoutes() {
+    this.app.use(routes);
+  }
+  start() {
+    this.configExpress();
+    this.setRoutes();
+    this.app.listen(process.env.PORT, () => {
+      console.log(`Server Running! 
+      http://localhost:${process.env.PORT}`);
+    });
+  }
+}
 
-app.listen(PORT || 8080, () => {
-  console.log(`Server Running! 
-  http://localhost:${PORT}`);
-});
+new Application();

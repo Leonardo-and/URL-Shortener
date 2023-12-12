@@ -9,12 +9,8 @@ const db = mysql.createConnection({
   password: PASSWORD,
 });
 
-db.connect((err) => {
-  if (err) {
-    console.log(err);
-    return;
-  }
-  console.log("Database connected!");
+db.connect((error) => {
+  error ? console.log(error) : console.log("Database connected!");
 });
 
-module.exports = db;
+module.exports = db.promise();
